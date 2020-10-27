@@ -7,6 +7,9 @@ code {
   color: #E01A76;
 }
 
+ul {
+    list-style-type: none; /* Remove bullets */
+}
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
