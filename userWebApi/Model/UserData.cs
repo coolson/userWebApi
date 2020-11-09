@@ -8,6 +8,7 @@ namespace userWebApi.Model
     public class UserData
     {
         public string Name { get; set; }
+        public string Password { get; set; }
         public bool IsMale { get; set; }
         public string Education { get; set; }
         public bool HasCar { get; set; }
@@ -18,9 +19,12 @@ namespace userWebApi.Model
 
             var messages = new List<string>()
             {
-                $"{Name}, спасибо за заполнение анкеты.",
+                "Cпасибо за регистрацию.",
+                $"Ваш логин: {Name} ",
+                $"Ваш пароль: {Password}",
                 "Вы указали следующие данные:",
-                $"Образование: {MakeEducationString(Education)} пол: {sexData}",
+                $"Образование: {MakeEducationString(Education)}", 
+                $"пол: {sexData}",
                 HasCar ? "Имеется автомобиль" : "Автомобиль отсутствует"
             };
 
