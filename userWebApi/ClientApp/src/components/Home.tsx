@@ -11,7 +11,7 @@ class Home extends Component {
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleOpenFile = this.handleOpenFile.bind(this);
         this.handleDeleteFile = this.handleDeleteFile.bind(this);
-        this.handleEditFile = this.handleEditFile.bind(this);
+        this.handleUpdateFile = this.handleUpdateFile.bind(this);
     }
     handleTextChange(event) {
         console.clear();
@@ -19,7 +19,7 @@ class Home extends Component {
         // console.log(this.state);
     }
     handleOpenFile(event) {
-        fetch(`http://localhost:51001/api/datafile?filename=${this.state.fileName}`)
+        fetch(`http://localhost:51001/api/datafile?filename=${this.state.fileName}`) //GET
             .then(response => response.text())
             .then(content => this.setState({ fileContent: content })
             );
@@ -34,9 +34,19 @@ class Home extends Component {
             });
     }
 
-    handleEditFile(event) {
-        console.log('Edit file');
+    handleUpdateFile(event) {
+        fetch(`http://localhost:51001/api/datafile?filename=${this.state.fileName}`
+            , {
+                method: 'POST',
+                body: JSON.stringify(this.state),
+                headers: { 'Content-Type': 'application/json; charset=utf-8' }
+            })
+            .then(response => response.status)
+            .then(status => {
+                console.log(status);
+            });
     }
+
     handleEditFileContent(event) {
         console.log('Edit file content');
     }
@@ -62,8 +72,8 @@ class Home extends Component {
                     <button name="delete" onClick={this.handleDeleteFile}>
                         Delete
           </button>
-                    <button name="editFile" onClick={this.handleEditFile}>
-                        Edit
+                    <button name="editFile" onClick={this.handleUpdateFile}>
+                        Save
           </button>
                 </div>
                 <br />

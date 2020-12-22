@@ -70,6 +70,17 @@ namespace userWebApi
             return Ok();
         }
 
+        [HttpPost]
+        public IActionResult UpdateFile(string fileName, [FromBody] FileData data)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                return NotFound(fileName);
+
+            System.IO.File.WriteAllText(PathTheFile(fileName), data.FileContent, System.Text.Encoding.UTF8);
+            return Ok();
+        }
+
+
         //[HttpGet]
         //[Route("GetContent")]
         //public IActionResult GetContent(FileData fd)
