@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using userWebApi.Model;
 using System.IO;
+using System.Linq;
 
 namespace userWebApi
 {
@@ -117,133 +118,50 @@ namespace userWebApi
         //}
 
 
-        //[HttpGet]
-        //[Route("SetSymbols")]
-        //public IActionResult SetSymbols(FileData fd)
-        //{
-        //    string path = @"C:\dev\react_laba2\userWebApi\ClientApp\src\" + fd.FileName + ".txt";
-        //    if (System.IO.File.Exists(path))
-        //    {
-        //        System.IO.File.WriteAllText(path, string.Empty);
-        //        using (System.IO.StreamWriter file = new System.IO.StreamWriter(path, true))
-        //        {
-        //            file.WriteLine(fd.FileContent);
-        //        }
-        //        var s = NumerateSymbols(path);
-        //        System.IO.File.WriteAllText(path, string.Empty);
-        //        using (System.IO.StreamWriter file = new System.IO.StreamWriter(path, true))
-        //        {
-        //            file.WriteLine(s);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        throw new Exception("no file");
-        //    }
-        //    return Ok(GetFileContent(path));
-        //}
+        [HttpPost]
+        [Route("SetSymbols")]
+        public IActionResult SetSymbols(string fileName, FileData fd)
+        {
+            return Ok(NumerateSymbols(fd.FileContent));
+        }
 
-        //static string[] NumerateSymbols(string filePath)
-        //{
-        //    try
-        //    {
-        //        string oldContent = "";
-        //        string newContent = "";
+        static string NumerateSymbols(string content)
+        {
+            var lines = content.Split('\n', '\r')
+                .Select((x, i) => NumerateLine(x, i))
+                .ToArray();
 
-        //        StreamReader reader = new StreamReader(filePath);
+            return string.Join('\n', lines);
+        }
 
-        //        using (reader)
-        //        {
-        //            oldContent = reader.ReadToEnd();
-        //        }
+        static string NumerateLine(string line, int no)
+        {
+            if (string.IsNullOrEmpty(line))
+                return "";
 
+            return char.IsDigit(line[0]) ? $"{no} ({line})" : $"{no} {line}";
+        }
 
-        //        int inx = 0;
-        //        string[] strArr = oldContent.Split("\n");
-        //        List<List<string>> raws = new List<List<string>>();
-        //        for (int i = 0; i < strArr.Length; i++)
-        //        {
-        //            List<string> oneRaw = new List<string>();
-        //            for (int j = 0; j < strArr[i].Length; j++)
-        //            {
-        //                if (Char.IsDigit(strArr[i][0]))
-        //                {
+        static string GetFileContent(string filePath)
+        {
+            return System.IO.File.ReadAllText(filePath);
+        }
 
-        //                    if (Char.IsDigit(strArr[i][0]) && strArr[i][j] == '\r')
-        //                    {
-        //                        oneRaw.Add(")");
-        //                        oneRaw.Insert(0, "(");
-
-        //                    }
-        //                    else
-        //                    {
-        //                        oneRaw.Add(strArr[i][j].ToString());
-
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    if (strArr[i][j] != '\r' && strArr[i][j] != '\n')
-        //                    {
-        //                        if (strArr[i][j] == ' ')
-        //                        {
-        //                            oneRaw.Add(" ");
-        //                        }
-        //                        else
-        //                        {
-        //                            oneRaw.Add(String.Format("{0}: {1}", inx, strArr[i][j].ToString()));
-        //                            //oneRaw.Add(strArr[i][j].ToString());
-        //                            inx++;
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            raws.Add(new List<string>(oneRaw));
-        //            oneRaw.Clear();
-        //        }
-
-        //        return strArr;
-
-        //    }
-        //    catch (FileNotFoundException)
-        //    {
-        //        throw new Exception("FileNotFoundException");
-        //    }
-        //    catch (DirectoryNotFoundException)
-        //    {
-        //        throw new Exception("DirectoryNotFoundException");
-        //    }
-        //    catch (IOException)
-        //    {
-        //        throw new Exception("IOException");
-        //    }
-        //}
-        //static string GetFileContent(string filePath)
-        //{
-        //    StreamReader reader = new StreamReader(filePath);
-        //    string oldContent = "";
-        //    using (reader)
-        //    {
-        //        oldContent = reader.ReadToEnd();
-        //    }
-
-        //    return oldContent;
-        //}
-        //static void SetFileWithYourLines(string filePath, string[] lines)
-        //{
-        //    //System.IO.File.WriteAllLines(filePath, testLines);
-        //    using (System.IO.StreamWriter file =
-        //        new System.IO.StreamWriter(filePath))
-        //    {
-        //        foreach (string line in lines)
-        //        {
-        //            // If the line doesn't contain the word 'Second', write the line to the file.
-        //            file.WriteLine(line);
-        //        }
-        //    }
+        static void SetFileWithYourLines(string filePath, string[] lines)
+        {
+            //System.IO.File.WriteAllLines(filePath, testLines);
+            using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(filePath))
+            {
+                foreach (string line in lines)
+                {
+                    // If the line doesn't contain the word 'Second', write the line to the file.
+                    file.WriteLine(line);
+                }
+            }
 
 
-        //}
+        }
 
 
     }

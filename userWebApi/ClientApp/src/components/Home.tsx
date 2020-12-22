@@ -5,13 +5,15 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            fileContent: 'empty',
-            fileName: 'ss'
+            fileContent: '',
+            fileName: 'my-lovely-file'
         };
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleOpenFile = this.handleOpenFile.bind(this);
         this.handleDeleteFile = this.handleDeleteFile.bind(this);
         this.handleUpdateFile = this.handleUpdateFile.bind(this);
+        this.handleEditFileContent = this.handleEditFileContent.bind(this);
+        this.handleSetSymbols = this.handleSetSymbols.bind(this);
     }
     handleTextChange(event) {
         console.clear();
@@ -51,8 +53,18 @@ class Home extends Component {
         console.log('Edit file content');
     }
     handleSetSymbols(event) {
-        console.log('Set symbols');
+        fetch(`http://localhost:51001/api/datafile/setsymbols?filename=${this.state.fileName}`
+            , {
+                method: 'POST',
+                body: JSON.stringify(this.state),
+                headers: { 'Content-Type': 'application/json; charset=utf-8' }
+            })
+            .then(response => response.text())
+            .then(content => this.setState({ fileContent: content })
+            );
     }
+
+
     render() {
         return (
             <div>
@@ -88,12 +100,10 @@ class Home extends Component {
                         onChange={this.handleTextChange}
                     />
                 </div>
-                <button name="editFileContent" onClick={this.handleEditFileContent}>
-                    Edit
-        </button>
+                
                 <button name="setSymbols" onClick={this.handleSetSymbols}>
                     set symbols
-        </button>
+                </button>
             </div>
         );
     }
