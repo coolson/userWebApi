@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Button from 'react-bootstrap/Button';
+//import Button from 'react-bootstrap/Button';
 
 class Home extends Component {
     constructor(props) {
@@ -9,6 +9,9 @@ class Home extends Component {
             fileName: 'ss'
         };
         this.handleTextChange = this.handleTextChange.bind(this);
+        this.handleOpenFile = this.handleOpenFile.bind(this);
+        this.handleDeleteFile = this.handleDeleteFile.bind(this);
+        this.handleEditFile = this.handleEditFile.bind(this);
     }
     handleTextChange(event) {
         console.clear();
@@ -16,11 +19,21 @@ class Home extends Component {
         // console.log(this.state);
     }
     handleOpenFile(event) {
-        console.log('open file');
+        fetch(`http://localhost:51001/api/datafile?filename=${this.state.fileName}`)
+            .then(response => response.text())
+            .then(content => this.setState({ fileContent: content })
+            );
     }
     handleDeleteFile(event) {
-        console.log('delete file');
+        fetch(`http://localhost:51001/api/datafile?filename=${this.state.fileName}`
+            , { method: 'DELETE' })
+            .then(response => response.status)
+            .then(status => {
+                console.log(status);
+                this.setState({ fileContent: "" });
+            });
     }
+
     handleEditFile(event) {
         console.log('Edit file');
     }
@@ -44,7 +57,7 @@ class Home extends Component {
           .txt
           <br></br>
                     <button name="open" onClick={this.handleOpenFile}>
-                        Open
+                        Open or Create
           </button>
                     <button name="delete" onClick={this.handleDeleteFile}>
                         Delete
@@ -65,12 +78,12 @@ class Home extends Component {
                         onChange={this.handleTextChange}
                     />
                 </div>
-                <Button name="editFileContent" onClick={this.handleEditFileContent}>
+                <button name="editFileContent" onClick={this.handleEditFileContent}>
                     Edit
-        </Button>
-                <Button name="setSymbols" onClick={this.handleSetSymbols}>
+        </button>
+                <button name="setSymbols" onClick={this.handleSetSymbols}>
                     set symbols
-        </Button>
+        </button>
             </div>
         );
     }
