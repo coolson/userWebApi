@@ -20,6 +20,12 @@ This application provides a simple yet functional file management system that al
 - **React Router** - Navigation
 - **Bootstrap & Reactstrap** - UI styling
 
+### Testing 🧪
+- **NUnit 3.13.3** - Unit testing framework
+- **FluentAssertions 6.7.0** - Assertion library
+- **Moq 4.18.2** - Mocking framework
+- **40+ Unit Tests** - Comprehensive test coverage
+
 ## Features
 
 - **File Operations**
@@ -60,7 +66,13 @@ This application provides a simple yet functional file management system that al
 │   ├── Program.cs                 # Application entry point
 │   ├── Startup.cs                 # Application configuration
 │   └── userWebApi.csproj          # Project file
-└── userWebApi.sln                 # Solution file
+├── userWebApi.Tests/              # 🧪 NUnit test project
+│   ├── Controllers/               # Controller tests
+│   ├── Model/                     # Model tests
+│   ├── TestHelper.cs              # Test utilities
+│   └── userWebApi.Tests.csproj    # Test project file
+├── userWebApi.sln                 # Solution file
+└── TESTING.md                     # 📖 Testing documentation
 ```
 
 ## Prerequisites
@@ -156,7 +168,22 @@ Files are stored in the `\temp` directory by default. This can be modified in th
 
 ## Development
 
-### Running Tests
+### Running Backend Tests (NUnit) 🧪
+```bash
+# Run all unit tests
+cd userWebApi.Tests
+dotnet test
+
+# Run with detailed output
+dotnet test --verbosity detailed
+
+# Run specific test class
+dotnet test --filter "FullyQualifiedName~DataFileControllerTests"
+```
+
+**📖 For detailed testing documentation, see [TESTING.md](TESTING.md)**
+
+### Running Frontend Tests
 ```bash
 cd userWebApi/ClientApp
 npm test
